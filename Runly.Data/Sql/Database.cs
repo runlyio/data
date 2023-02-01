@@ -276,7 +276,7 @@ namespace Runly.Data.Sql
                 await Task.Delay(azureGracePeriod);
         }
 
-        async Task ExecuteScriptAsync(DbConnection conn, string sql, IDbTransaction tx = null)
+        async Task ExecuteScriptAsync(DbConnection conn, string sql, IDbTransaction? tx = null)
         {
             try
             {
