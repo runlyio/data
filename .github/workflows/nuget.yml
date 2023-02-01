@@ -22,7 +22,7 @@ jobs:
 
       - name: 'Get Version'
         id: version
-        uses: battila7/get-version-action@v3
+        uses: battila7/get-version-action@v2.2.1
 
       - name: 'Restore packages'
         run: dotnet restore ${{ env.PROJECT_PATH }}
