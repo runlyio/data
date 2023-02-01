@@ -26,6 +26,4 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
-  <Import Project="build\Version.props" />
-
 </Project>

@@ -1,7 +1,10 @@
-name: Deploy Production Packages
+name: Deploy to Nuget
 on:
   release:
     types: [published]
+
+env:
+  PROJECT_PATH: 'Runly.Data/Runly.Data.csproj'
 
 jobs:
   publish:
@@ -17,8 +20,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 'Get Version'
+        id: version
+        uses: battila7/get-version-action@v2
+
+      - name: 'Restore packages'
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: 'Build project'
+        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=$VERSION
+
       - name: Package
-        run: dotnet pack Runly.Data/Runly.Data.csproj -c Release -o feeds/nuget
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -c Release -o feeds/nuget
 
       - name: Push to Nuget
         run: find feeds/nuget -name '*.nupkg' | xargs -i dotnet nuget push {} -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_KEY }}
