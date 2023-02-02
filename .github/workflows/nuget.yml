@@ -22,22 +22,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Test
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ env.RELEASE_VERSION }}
+      - name: Set Version Variable
+        if: ${{ github.ref_type == 'tag' }}
+        env:
+          TAG: ${{ github.ref_name }}
+        run: echo "VERSION=${TAG#v}" >> $GITHUB_ENV
 
       - name: 'Restore packages'
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
       - name: 'Build project'
-        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=$RELEASE_VERSION
+        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=${{ $VERSION }}
 
       - name: Package
-        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore -p:PackageVersion=${{ $RELEASE_VERSION }} -c Release -o feeds/nuget
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore -p:PackageVersion=${{ $VERSION }} -c Release -o feeds/nuget
 
       - name: Push to Nuget
         run: find feeds/nuget -name '*.nupkg' | xargs -i dotnet nuget push {} -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_KEY }}
