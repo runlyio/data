@@ -11,6 +11,8 @@
     <RepositoryUrl>https://github.com/runlyio/data</RepositoryUrl>
     <PackageTags>database;sql</PackageTags>
     <Copyright>© 2020 Runly LLC</Copyright>
+    <Description>Tools for simple database transaction mangement and setup.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
