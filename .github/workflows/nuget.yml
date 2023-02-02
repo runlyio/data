@@ -1,7 +1,9 @@
 name: Deploy to Nuget
+
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+    - 'v*'
 
 env:
   PROJECT_PATH: 'Runly.Data/Runly.Data.csproj'
@@ -22,6 +24,7 @@ jobs:
 
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - name: Test
         run: |
           echo $RELEASE_VERSION
